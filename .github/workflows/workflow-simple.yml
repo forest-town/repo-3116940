@@ -1,0 +1,35 @@
+
+name: the-power-workflow-simple
+on:
+  workflow_dispatch:
+  workflow_call:
+  repository_dispatch:
+    types: [custom_event_type]
+jobs:
+  the-power-actions-demo:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: check-curl-version
+        run: |
+          curl --version
+
+      - name: test-connectivity-to-api-github-com
+        run: |
+          curl --verbose -H 'Accept: application/vnd.github+json' -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN}}" https://api.github.com/octocat
+
+      - name: test-connectivity-to-codeload-github-com
+        run: |
+          curl --verbose -H 'Accept: application/vnd.github+json' -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN}}" https://codeload.github.com
+
+      - name: test-download-repo-archive
+        run: |
+          curl -L -H 'Accept: application/vnd.github.v3+json' -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/forest-town/repo-3116940/zipball/main -o repo-3116940-1733228619.archive.zip
+
+      - name: test-download-release-from-this-repo
+        run: |
+          curl -L -H 'Accept: application/vnd.github.v3+json' -H 'Accept: application/octet-stream' -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/forest-town/repo-3116940/tarball/the-power-release -o repo-3116940.release_the-power-release.zip
+      - name: ls
+        run: |
+          ls -l *.zip
+
